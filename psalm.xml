@@ -40,6 +40,12 @@
                 <file name="src/Symfony/Component/Clock/DatePoint.php" />
             </errorLevel>
         </MissingImmutableAnnotation>
+        <DuplicateClass>
+            <errorLevel type="suppress">
+                <!-- These traits are declared once per version of the relay extension -->
+                <directory name="src/Symfony/Component/Cache/Traits/Relay" />
+            </errorLevel>
+        </DuplicateClass>
         <UndefinedClass>
             <errorLevel type="suppress">
                 <!-- These classes have been added in PHP 8.4 -->
