@@ -220,8 +220,9 @@ final class MailChannelsApiTransport extends AbstractApiTransport
 
     private function getErrorMessage(array $result, ResponseInterface $response): string
     {
-        if (\is_array($errors = $result['errors'] ?? null) && $errors) {
-            return implode('; ', array_map(static fn ($error): string => \is_scalar($error) ? (string) $error : json_encode($error), $errors));
+        // The API documents its errors as a list of strings
+        if (\is_array($result['errors'] ?? null) && $errors = array_filter($result['errors'], \is_string(...))) {
+            return implode('; ', $errors);
         }
 
         return $response->getContent(false);
