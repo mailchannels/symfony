@@ -1,0 +1,32 @@
+[
+  {
+    "email": "sender@example.com",
+    "customer_handle": "synthetic-account",
+    "timestamp": 1793469600,
+    "event": "processed",
+    "request_id": "req-1",
+    "recipients": ["recipient@example.com"]
+  },
+  {
+    "email": "sender@example.com",
+    "customer_handle": "synthetic-account",
+    "timestamp": 1793469660,
+    "event": "hard-bounced",
+    "request_id": "req-1",
+    "status": "550",
+    "reason": "5.1.1 mailbox does not exist",
+    "recipients": ["recipient@example.com"]
+  },
+  {
+    "email": "sender@example.com",
+    "customer_handle": "synthetic-account",
+    "timestamp": 1793469720,
+    "event": "click",
+    "request_id": "req-2",
+    "smtp_id": "<msg-2@mailchannels.net>",
+    "url": "https://example.com/welcome",
+    "user_agent": "Mozilla/5.0",
+    "ip": "192.0.2.10",
+    "recipients": ["other@example.com"]
+  }
+]

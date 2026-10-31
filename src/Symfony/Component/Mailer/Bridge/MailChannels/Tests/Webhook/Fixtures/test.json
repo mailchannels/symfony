@@ -1,0 +1,10 @@
+[
+  {
+    "email": "test@mailchannels.com",
+    "customer_handle": "synthetic-account",
+    "timestamp": 1793469600,
+    "event": "test",
+    "request_id": "test-request",
+    "smtp_id": "<test@mailchannels.net>"
+  }
+]

@@ -22,6 +22,7 @@ use Symfony\Component\Mailer\Bridge\Mailchimp\Transport\MandrillTransportFactory
 use Symfony\Component\Mailer\Bridge\MailerSend\Transport\MailerSendTransportFactory;
 use Symfony\Component\Mailer\Bridge\Mailgun\Transport\MailgunTransportFactory;
 use Symfony\Component\Mailer\Bridge\Mailjet\Transport\MailjetTransportFactory;
+use Symfony\Component\Mailer\Bridge\MailChannels\Transport\MailChannelsTransportFactory;
 use Symfony\Component\Mailer\Bridge\MailKite\Transport\MailKiteTransportFactory;
 use Symfony\Component\Mailer\Bridge\Mailomat\Transport\MailomatTransportFactory;
 use Symfony\Component\Mailer\Bridge\MailPace\Transport\MailPaceTransportFactory;
@@ -65,6 +66,7 @@ return static function (ContainerConfigurator $container) {
         'mailersend' => MailerSendTransportFactory::class,
         'mailgun' => MailgunTransportFactory::class,
         'mailjet' => MailjetTransportFactory::class,
+        'mailchannels' => MailChannelsTransportFactory::class,
         'mailkite' => MailKiteTransportFactory::class,
         'mailomat' => MailomatTransportFactory::class,
         'mailpace' => MailPaceTransportFactory::class,
