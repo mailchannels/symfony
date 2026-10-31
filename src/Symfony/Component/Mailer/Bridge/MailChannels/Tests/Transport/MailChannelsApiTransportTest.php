@@ -244,6 +244,16 @@ class MailChannelsApiTransportTest extends TestCase
         (new MailChannelsApiTransport('KEY', $client))->send((new Email())->from('foo@example.com')->to('bar@example.com')->subject('An email')->text('Test email body'));
     }
 
+    public function testSendThrowsWithTheBodyForUnexpectedErrors()
+    {
+        $client = new MockHttpClient(new JsonMockResponse(['errors' => [['code' => 'unexpected']]], ['http_code' => 500]));
+
+        $this->expectException(HttpTransportException::class);
+        $this->expectExceptionMessage('Unable to send an email: {"errors":[{"code":"unexpected"}]} (code 500).');
+
+        (new MailChannelsApiTransport('KEY', $client))->send((new Email())->from('foo@example.com')->to('bar@example.com')->subject('An email')->text('Test email body'));
+    }
+
     public function testSendThrowsForFailedResult()
     {
         $client = new MockHttpClient(new JsonMockResponse([
