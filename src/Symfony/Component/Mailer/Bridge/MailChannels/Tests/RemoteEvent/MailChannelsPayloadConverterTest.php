@@ -70,6 +70,19 @@ class MailChannelsPayloadConverterTest extends TestCase
         $this->assertSame('', $converted->getRecipientEmail());
     }
 
+    public function testRecipientThatIsNotAStringIsIgnored()
+    {
+        $converted = (new MailChannelsPayloadConverter())->convert([
+            'timestamp' => 1793469600,
+            'event' => 'delivered',
+            'recipients' => [['email' => 'recipient@example.com']],
+            'campaign_id' => ['welcome'],
+        ]);
+
+        $this->assertSame('', $converted->getRecipientEmail());
+        $this->assertSame([], $converted->getTags());
+    }
+
     public function testUnsupportedEvent()
     {
         $this->expectException(ParseException::class);

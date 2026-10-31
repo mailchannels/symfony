@@ -55,10 +55,11 @@ final class MailChannelsPayloadConverter implements PayloadConverterInterface
 
         $event->setDate(\DateTimeImmutable::createFromTimestamp($payload['timestamp']));
         // The "email" field is the sender, so the recipient comes from the "recipients" list
-        $event->setRecipientEmail((string) ($payload['recipients'][0] ?? ''));
+        $recipient = $payload['recipients'][0] ?? '';
+        $event->setRecipientEmail(\is_string($recipient) ? $recipient : '');
 
-        if (isset($payload['campaign_id']) && '' !== $payload['campaign_id']) {
-            $event->setTags([(string) $payload['campaign_id']]);
+        if (\is_string($payload['campaign_id'] ?? null) && '' !== $payload['campaign_id']) {
+            $event->setTags([$payload['campaign_id']]);
         }
 
         return $event;
