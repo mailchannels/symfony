@@ -380,6 +380,7 @@ class MailerBundle extends AbstractBundle
             Bridge\MailerSend\Transport\MailerSendTransportFactory::class => ['symfony/mailer-send-mailer', 'mailer.transport_factory.mailersend'],
             Bridge\Mailgun\Transport\MailgunTransportFactory::class => ['symfony/mailgun-mailer', 'mailer.transport_factory.mailgun'],
             Bridge\Mailjet\Transport\MailjetTransportFactory::class => ['symfony/mailjet-mailer', 'mailer.transport_factory.mailjet'],
+            Bridge\MailChannels\Transport\MailChannelsTransportFactory::class => ['symfony/mail-channels-mailer', 'mailer.transport_factory.mailchannels'],
             Bridge\MailKite\Transport\MailKiteTransportFactory::class => ['symfony/mail-kite-mailer', 'mailer.transport_factory.mailkite'],
             Bridge\Mailomat\Transport\MailomatTransportFactory::class => ['symfony/mailomat-mailer', 'mailer.transport_factory.mailomat'],
             Bridge\MailPace\Transport\MailPaceTransportFactory::class => ['symfony/mail-pace-mailer', 'mailer.transport_factory.mailpace'],
@@ -517,6 +518,7 @@ class MailerBundle extends AbstractBundle
                 Bridge\AhaSend\Webhook\AhaSendRequestParser::class => ['symfony/aha-send-mailer', 'mailer.webhook.request_parser.ahasend'],
                 Bridge\Azure\Webhook\AzureRequestParser::class => ['symfony/azure-mailer', 'mailer.webhook.request_parser.azure'],
                 Bridge\Brevo\Webhook\BrevoRequestParser::class => ['symfony/brevo-mailer', 'mailer.webhook.request_parser.brevo'],
+                Bridge\MailChannels\Webhook\MailChannelsRequestParser::class => ['symfony/mail-channels-mailer', 'mailer.webhook.request_parser.mailchannels'],
                 Bridge\MailerSend\Webhook\MailerSendRequestParser::class => ['symfony/mailer-send-mailer', 'mailer.webhook.request_parser.mailersend'],
                 Bridge\Mailchimp\Webhook\MailchimpRequestParser::class => ['symfony/mailchimp-mailer', 'mailer.webhook.request_parser.mailchimp'],
                 Bridge\Mailgun\Webhook\MailgunRequestParser::class => ['symfony/mailgun-mailer', 'mailer.webhook.request_parser.mailgun'],
@@ -533,7 +535,11 @@ class MailerBundle extends AbstractBundle
 
             foreach ($webhookRequestParsers as $class => [$package, $service]) {
                 $target = 'mailer.'.substr(strrchr($service, '.'), 1);
-                $container->getAlias($class)->setDeprecated('symfony/mailer', '8.2', 'The "%alias_id%" alias is deprecated, use #[Target(\''.$target.'\')] with "'.RequestParserInterface::class.'" instead.');
+
+                // Parsers added since 8.2 have no alias named after their class
+                if ($container->hasAlias($class)) {
+                    $container->getAlias($class)->setDeprecated('symfony/mailer', '8.2', 'The "%alias_id%" alias is deprecated, use #[Target(\''.$target.'\')] with "'.RequestParserInterface::class.'" instead.');
+                }
 
                 if (!ContainerBuilder::willBeAvailable($package, $class, ['symfony/mailer'])) {
                     $container->removeDefinition($service);

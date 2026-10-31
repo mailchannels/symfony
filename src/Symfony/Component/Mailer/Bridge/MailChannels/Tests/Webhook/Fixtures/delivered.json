@@ -1,0 +1,11 @@
+[
+  {
+    "email": "sender@example.com",
+    "customer_handle": "synthetic-account",
+    "timestamp": 1793469600,
+    "event": "delivered",
+    "request_id": "wBLWrCnK0Z965pf-cgxhNg8bo5s=",
+    "campaign_id": "password-reset",
+    "recipients": ["recipient@example.com"]
+  }
+]

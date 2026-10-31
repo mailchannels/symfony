@@ -497,7 +497,8 @@ class PropertyAccessor implements PropertyAccessorInterface
                 }
             } catch (\Error $e) {
                 // handle uninitialized properties in PHP >= 7.4
-                if (preg_match('/^Typed property ([\w\\\\@]+)::\$(\w+) must not be accessed before initialization$/', $e->getMessage(), $matches) || preg_match('/^Cannot access uninitialized non-nullable property ([\w\\\\@]+)::\$(\w+) by reference$/', $e->getMessage(), $matches)) {
+                // Since PHP 8.6, the name of an anonymous class is followed by its "\0file:line$id" suffix
+                if (preg_match('/^Typed property ([\w\\\\@]+)(?:\0.*?)?::\$(\w+) must not be accessed before initialization$/s', $e->getMessage(), $matches) || preg_match('/^Cannot access uninitialized non-nullable property ([\w\\\\@]+)(?:\0.*?)?::\$(\w+) by reference$/s', $e->getMessage(), $matches)) {
                     $r = new \ReflectionProperty(str_contains($matches[1], '@anonymous') ? $class : $matches[1], $matches[2]);
                     $type = ($type = $r->getType()) instanceof \ReflectionNamedType ? $type->getName() : (string) $type;
 

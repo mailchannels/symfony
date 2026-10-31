@@ -22,6 +22,7 @@ use Symfony\Component\Mailer\Bridge\Brevo\Transport\BrevoTransportFactory;
 use Symfony\Component\Mailer\Bridge\Cloudflare\Transport\CloudflareTransportFactory;
 use Symfony\Component\Mailer\Bridge\Google\Transport\GmailTransportFactory;
 use Symfony\Component\Mailer\Bridge\Infobip\Transport\InfobipTransportFactory;
+use Symfony\Component\Mailer\Bridge\MailChannels\Transport\MailChannelsTransportFactory;
 use Symfony\Component\Mailer\Bridge\Mailchimp\Transport\MandrillTransportFactory;
 use Symfony\Component\Mailer\Bridge\MailerSend\Transport\MailerSendTransportFactory;
 use Symfony\Component\Mailer\Bridge\Mailgun\Transport\MailgunTransportFactory;
@@ -72,6 +73,7 @@ final class Transport
         MailerSendTransportFactory::class,
         MailgunTransportFactory::class,
         MailjetTransportFactory::class,
+        MailChannelsTransportFactory::class,
         MailKiteTransportFactory::class,
         MailomatTransportFactory::class,
         MailPaceTransportFactory::class,

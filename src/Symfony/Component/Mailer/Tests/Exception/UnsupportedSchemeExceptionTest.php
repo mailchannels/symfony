@@ -22,6 +22,7 @@ use Symfony\Component\Mailer\Bridge\Brevo\Transport\BrevoTransportFactory;
 use Symfony\Component\Mailer\Bridge\Cloudflare\Transport\CloudflareTransportFactory;
 use Symfony\Component\Mailer\Bridge\Google\Transport\GmailTransportFactory;
 use Symfony\Component\Mailer\Bridge\Infobip\Transport\InfobipTransportFactory;
+use Symfony\Component\Mailer\Bridge\MailChannels\Transport\MailChannelsTransportFactory;
 use Symfony\Component\Mailer\Bridge\Mailchimp\Transport\MandrillTransportFactory;
 use Symfony\Component\Mailer\Bridge\MailerSend\Transport\MailerSendTransportFactory;
 use Symfony\Component\Mailer\Bridge\Mailgun\Transport\MailgunTransportFactory;
@@ -59,6 +60,7 @@ final class UnsupportedSchemeExceptionTest extends TestCase
             MailerSendTransportFactory::class => false,
             MailgunTransportFactory::class => false,
             MailjetTransportFactory::class => false,
+            MailChannelsTransportFactory::class => false,
             MailKiteTransportFactory::class => false,
             MailomatTransportFactory::class => false,
             MandrillTransportFactory::class => false,
@@ -98,6 +100,7 @@ final class UnsupportedSchemeExceptionTest extends TestCase
         yield ['mailersend', 'symfony/mailersend-mailer'];
         yield ['mailgun', 'symfony/mailgun-mailer'];
         yield ['mailjet', 'symfony/mailjet-mailer'];
+        yield ['mailchannels', 'symfony/mail-channels-mailer'];
         yield ['mailkite', 'symfony/mail-kite-mailer'];
         yield ['mailomat', 'symfony/mailomat-mailer'];
         yield ['mailpace', 'symfony/mail-pace-mailer'];

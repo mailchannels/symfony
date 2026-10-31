@@ -18,6 +18,7 @@ use Symfony\Component\Mailer\Bridge\Brevo\Transport\BrevoTransportFactory;
 use Symfony\Component\Mailer\Bridge\Cloudflare\Transport\CloudflareTransportFactory;
 use Symfony\Component\Mailer\Bridge\Google\Transport\GmailTransportFactory;
 use Symfony\Component\Mailer\Bridge\Infobip\Transport\InfobipTransportFactory;
+use Symfony\Component\Mailer\Bridge\MailChannels\Transport\MailChannelsTransportFactory;
 use Symfony\Component\Mailer\Bridge\Mailchimp\Transport\MandrillTransportFactory;
 use Symfony\Component\Mailer\Bridge\MailerSend\Transport\MailerSendTransportFactory;
 use Symfony\Component\Mailer\Bridge\Mailgun\Transport\MailgunTransportFactory;
@@ -65,6 +66,7 @@ return static function (ContainerConfigurator $container) {
         'mailersend' => MailerSendTransportFactory::class,
         'mailgun' => MailgunTransportFactory::class,
         'mailjet' => MailjetTransportFactory::class,
+        'mailchannels' => MailChannelsTransportFactory::class,
         'mailkite' => MailKiteTransportFactory::class,
         'mailomat' => MailomatTransportFactory::class,
         'mailpace' => MailPaceTransportFactory::class,
