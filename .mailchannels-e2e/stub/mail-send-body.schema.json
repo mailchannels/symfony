@@ -1,0 +1,258 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$comment": "MailSendBody from github.com/mailchannels/mc-docs email-api.yaml @ 091028b388f45732fc6a18ff249a72d17e206cc2, with $ref resolved to definitions. Regenerate rather than edit.",
+  "properties": {
+    "attachments": {
+      "items": {
+        "$ref": "#/definitions/Attachment"
+      },
+      "maxItems": 1000,
+      "type": "array"
+    },
+    "campaign_id": {
+      "description": "The campaign identifier. If specified, this ID will be included in all relevant webhooks. It can be up to 48 UTF-8 characters long and must not contain spaces.\n",
+      "type": "string"
+    },
+    "content": {
+      "items": {
+        "$ref": "#/definitions/ContentItem"
+      },
+      "type": "array"
+    },
+    "dkim_domain": {
+      "description": "If set, you must also provide the matching dkim_selector.\n",
+      "type": "string"
+    },
+    "dkim_private_key": {
+      "description": "Encoded in Base64.\nIf set, you must also provide the matching dkim_domain and dkim_selector.\n",
+      "type": "string"
+    },
+    "dkim_selector": {
+      "description": "If set without a matching dkim_domain, the domain will be taken from the `from` email address.\n",
+      "type": "string"
+    },
+    "envelope_from": {
+      "$ref": "#/definitions/EmailAddress",
+      "description": "Optional envelope sender address. If not set, the envelope sender defaults to the from.email field.\nCan be overridden per-personalization.\nOnly the email portion is used; the name field is ignored.\n"
+    },
+    "from": {
+      "$ref": "#/definitions/EmailAddress"
+    },
+    "headers": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "description": "A JSON object containing key-value pairs, where both keys (header names) and values must be strings.\nThese pairs represent custom headers to be substituted. Please note the following restrictions and behavior:\n- Reserved headers: The following headers cannot be modified:\n  - Authentication-Results\n  - BCC\n  - CC\n  - Content-Transfer-Encoding\n  - Content-Type\n  - DKIM-Signature\n  - From\n  - Message-ID\n  - Received\n  - Reply-To\n  - Subject\n  - To\n- Header precedence: If a header is defined in both the personalizations object and the root headers,\nthe value from personalizations will be used.\n- Case sensitivity: Headers are treated as case-insensitive. If multiple headers differ only by case,\nonly one will be used, with no guarantee of which one.\n- Size limit: The combined size of header names and values, in bytes, must not exceed 5 KB.\nThis applies to the merged headers that actually apply to each personalization (root headers\nplus that personalization's own overrides), not to the root and personalization headers\nchecked independently. Requests exceeding it are rejected.\n",
+      "type": "object"
+    },
+    "personalizations": {
+      "items": {
+        "$ref": "#/definitions/Personalization"
+      },
+      "maxItems": 1000,
+      "type": "array"
+    },
+    "reply_to": {
+      "$ref": "#/definitions/EmailAddress"
+    },
+    "subject": {
+      "type": "string"
+    },
+    "tracking_settings": {
+      "description": "Settings to adjust open and click tracking for the message. Please note that\nenabling tracking for your messages requires a subscription that supports open\nand click tracking.\n",
+      "properties": {
+        "click_tracking": {
+          "properties": {
+            "custom_domain_name": {
+              "description": "The name of a configured active click tracking domain. When specified, click\ntracking links will use this domain instead of the default MailChannels domain.\nThe domain must be registered in your account and have an active status.\n",
+              "maxLength": 64,
+              "pattern": "^[a-z0-9-]+$",
+              "type": "string"
+            },
+            "enable": {
+              "default": false,
+              "description": "Setting to enable or disable click tracking for the message.\nThis feature allows you to track when a recipient clicks a link in your email.\n",
+              "type": "boolean"
+            }
+          },
+          "type": "object"
+        },
+        "open_tracking": {
+          "properties": {
+            "custom_domain_name": {
+              "description": "The name of a configured active open tracking domain. When specified, the open\ntracking pixel will use this domain instead of the default MailChannels domain.\nThe domain must be registered in your account and have an active status.\n",
+              "maxLength": 64,
+              "pattern": "^[a-z0-9-]+$",
+              "type": "string"
+            },
+            "enable": {
+              "default": false,
+              "description": "Setting to enable or disable open tracking for the message.\nThis feature allows you to track when a recipient opens your email.\nPlease note that some email clients may not support open tracking.\n",
+              "type": "boolean"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "transactional": {
+      "default": true,
+      "description": "Mark these messages as transactional or non-transactional.\nIn order for a message to be marked as non-transactional,\nit must have exactly one recipient per personalization,\nand it must be DKIM signed. 400 Bad Request will be returned\nif there are more than one recipient in any personalization for\nnon-transactional messages.\nIf a message is marked as non-transactional, it changes the sending process as follows:\n  * List-Unsubscribe and List-Unsubscribe-Post headers will be added, unless you supply your own List-Unsubscribe header, in which case yours is used and neither is added.\n",
+      "nullable": true,
+      "type": "boolean"
+    },
+    "unsubscribe_settings": {
+      "description": "Settings to customize the unsubscribe experience for the message.\n",
+      "properties": {
+        "custom_domain_name": {
+          "description": "The name of a configured active unsubscribe tracking domain. When specified,\nunsubscribe links will use this domain instead of the default MailChannels domain.\nThe domain must be registered in your account and have an active status.\n",
+          "maxLength": 64,
+          "pattern": "^[a-z0-9-]+$",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "required": [
+    "personalizations",
+    "from",
+    "subject",
+    "content"
+  ],
+  "type": "object",
+  "definitions": {
+    "Attachment": {
+      "properties": {
+        "content": {
+          "description": "the attachment data, encoded in base64",
+          "type": "string"
+        },
+        "content_id": {
+          "description": "A unique identifier for this attachment. When set, the attachment is embedded\ninline in the message body (Content-Disposition: inline) instead of offered as a\ndownloadable attachment, and can be referenced from HTML content via a `cid:` URI,\ne.g. `<img src=\"cid:logo123\">` refers to an attachment with `content_id: logo123`\n(RFC 2392). Must be unique across all attachments in the request.\n",
+          "maxLength": 255,
+          "pattern": "^[\\x21-\\x3B\\x3D\\x3F-\\x7E]{1,255}$",
+          "type": "string"
+        },
+        "filename": {
+          "description": "the name of the attachment file",
+          "type": "string"
+        },
+        "type": {
+          "description": "the MIME type of the attachment",
+          "type": "string"
+        }
+      },
+      "required": [
+        "content",
+        "filename"
+      ],
+      "type": "object"
+    },
+    "ContentItem": {
+      "properties": {
+        "template_type": {
+          "description": "The template type of the content",
+          "enum": [
+            "mustache"
+          ],
+          "type": "string"
+        },
+        "type": {
+          "description": "The mime type of the content you are including in your email",
+          "type": "string"
+        },
+        "value": {
+          "description": "The actual content of the specified mime type that you are including in the message",
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "value"
+      ],
+      "type": "object"
+    },
+    "EmailAddress": {
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "name": {
+          "description": "Display name in raw text, e.g. John Doe, \u5f20\u4e09",
+          "type": "string"
+        }
+      },
+      "required": [
+        "email"
+      ],
+      "type": "object"
+    },
+    "Personalization": {
+      "properties": {
+        "bcc": {
+          "items": {
+            "$ref": "#/definitions/EmailAddress"
+          },
+          "maxItems": 1000,
+          "type": "array"
+        },
+        "cc": {
+          "items": {
+            "$ref": "#/definitions/EmailAddress"
+          },
+          "maxItems": 1000,
+          "type": "array"
+        },
+        "dkim_domain": {
+          "description": "If set, you must also provide the matching dkim_selector.\n",
+          "type": "string"
+        },
+        "dkim_private_key": {
+          "description": "Encoded in Base64.\nIf set, you must also provide the matching dkim_domain and dkim_selector.\n",
+          "type": "string"
+        },
+        "dkim_selector": {
+          "description": "If set without a matching dkim_domain, the domain will be taken from the `from` email address.\n",
+          "type": "string"
+        },
+        "dynamic_template_data": {
+          "description": "A JSON object containing key-value pairs of variables to set for template rendering.\nKeys must be strings, and values can be one of the following types:\n* string\n* boolean\n* number\n* list, whose values are all of permitted types\n* map, whose keys must be strings, and whose values are all of permitted types\n",
+          "type": "object"
+        },
+        "envelope_from": {
+          "$ref": "#/definitions/EmailAddress",
+          "description": "Optional envelope sender address. If set, overrides the root-level envelope_from and from.email for this personalization.\nOnly the email portion is used; the name field is ignored.\n"
+        },
+        "from": {
+          "$ref": "#/definitions/EmailAddress"
+        },
+        "headers": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "A JSON object containing key-value pairs, where both keys (header names) and values must be strings.\nThese pairs represent custom headers to be substituted. Please note the following restrictions and behavior:\n- Reserved headers: The following headers cannot be modified:\n  - Authentication-Results\n  - BCC\n  - CC\n  - Content-Transfer-Encoding\n  - Content-Type\n  - DKIM-Signature\n  - From\n  - Message-ID\n  - Received\n  - Reply-To\n  - Subject\n  - To\n- Header precedence: If a header is defined in both the personalizations object and the root headers,\nthe value from personalizations will be used.\n- Case sensitivity: Headers are treated as case-insensitive. If multiple headers differ only by case,\nonly one will be used, with no guarantee of which one.\n- Size limit: The combined size of header names and values, in bytes, must not exceed 5 KB.\nThis applies to the merged headers that actually apply to each personalization (root headers\nplus that personalization's own overrides), not to the root and personalization headers\nchecked independently. Requests exceeding it are rejected.\n",
+          "type": "object"
+        },
+        "reply_to": {
+          "$ref": "#/definitions/EmailAddress"
+        },
+        "subject": {
+          "type": "string"
+        },
+        "to": {
+          "items": {
+            "$ref": "#/definitions/EmailAddress"
+          },
+          "maxItems": 1000,
+          "minItems": 1,
+          "type": "array"
+        }
+      },
+      "required": [
+        "to"
+      ]
+    }
+  }
+}
