@@ -39,14 +39,24 @@ class CacheAttributeListenerTest extends TestCase
     private Cache $cache;
     private Request $request;
     private ResponseEvent $event;
+    private string $timezone;
 
     protected function setUp(): void
     {
+        // Relative times such as "1 day" span 25 hours on a DST change in local time
+        $this->timezone = date_default_timezone_get();
+        date_default_timezone_set('UTC');
+
         $this->listener = new CacheAttributeListener();
         $this->response = new Response();
         $this->cache = new Cache();
         $this->request = $this->createRequest($this->cache);
         $this->event = $this->createEventMock($this->request, $this->response);
+    }
+
+    protected function tearDown(): void
+    {
+        date_default_timezone_set($this->timezone);
     }
 
     public function testWontReassignResponseWhenResponseIsUnsuccessful()
